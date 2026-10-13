@@ -3,6 +3,7 @@ import useCollection from "./useCollection";
 import plantsData from "../catalog/plantsData"; // data milik Orang 1
 import CollectionCard from "./CollectionCard";
 import WateringSchedule from "./WateringSchedule";
+import CollectionTopBar from "./CollectionTopBar";
 import { isDueToday } from "./wateringUtils";
 import "./Collection.css";
 
@@ -26,6 +27,8 @@ export default function CollectionContainer() {
   if (collection.length === 0) {
     return (
       <section className="collection">
+        <CollectionTopBar />
+
         <header className="collection__header">
           <h2>Koleksi Saya</h2>
           <p>Pantau jadwal siram dan perawatan tanamanmu di sini.</p>
@@ -46,6 +49,8 @@ export default function CollectionContainer() {
 
   return (
     <section className="collection">
+      <CollectionTopBar />
+
       <header className="collection__header">
         <h2>Koleksi Saya</h2>
         <p>Pantau jadwal siram dan perawatan tanamanmu di sini.</p>

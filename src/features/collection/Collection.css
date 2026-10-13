@@ -24,24 +24,22 @@
   color: var(--col-text);
 }
 
-/* ===== Palet (gelap) ===== */
-@media (prefers-color-scheme: dark) {
-  .collection {
-    --col-surface: #1d2820;
-    --col-surface-2: #16201a;
-    --col-border: #2f4034;
-    --col-text: #eaf3ea;
-    --col-muted: #a3b5a5;
-    --col-accent: #5fbf74;
-    --col-accent-contrast: #0e1a11;
-    --col-ok-bg: #1d3a26;
-    --col-ok-text: #8fe0a2;
-    --col-warn-bg: #3b2f10;
-    --col-warn-text: #f3c969;
-    --col-danger-bg: #42201a;
-    --col-danger-text: #ff9d85;
-    --col-shadow: rgba(0, 0, 0, 0.45);
-  }
+/* ===== Palet (gelap), aktif saat <html data-theme="dark"> ===== */
+:root[data-theme="dark"] .collection {
+  --col-surface: #1d2820;
+  --col-surface-2: #16201a;
+  --col-border: #2f4034;
+  --col-text: #eaf3ea;
+  --col-muted: #a3b5a5;
+  --col-accent: #5fbf74;
+  --col-accent-contrast: #0e1a11;
+  --col-ok-bg: #1d3a26;
+  --col-ok-text: #8fe0a2;
+  --col-warn-bg: #3b2f10;
+  --col-warn-text: #f3c969;
+  --col-danger-bg: #42201a;
+  --col-danger-text: #ff9d85;
+  --col-shadow: rgba(0, 0, 0, 0.45);
 }
 
 /* ===== Header halaman ===== */
@@ -294,3 +292,14 @@
   .collection-card, .progress__fill, .collection .btn { transition: none; }
   .collection-card:hover { transform: none; }
 }
+
+/* ===== Baris atas (kembali + toggle tema) ===== */
+.collection__topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+.collection .collection__topbar .btn { flex: 0 0 auto; }
