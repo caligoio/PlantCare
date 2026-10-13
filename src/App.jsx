@@ -4,6 +4,7 @@ import { Routes, Route } from "react-router-dom";
 import PlantListContainer from "./features/catalog/PlantListContainer";
 import PlantDetail from "./PlantDetail.jsx";
 import CollectionContainer from "./features/collection/CollectionContainer";
+import ThemeToggle from "./features/theme/ThemeToggle";
 import "./App.css";
 
 function App() {
