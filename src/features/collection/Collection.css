@@ -30,3 +30,16 @@
 }
 .collection-card__actions button:focus-visible { outline: 3px solid #9cc8a3; outline-offset: 2px; }
 .collection-card__actions .collection-card__remove { background: transparent; color: #2f6b3a; }
+
+/* ---- Jadwal siram ---- */
+.schedule__block { margin-top: 2rem; }
+.schedule__list { list-style: none; margin: 0; padding: 0; }
+.schedule__item {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.6rem 0;
+  border-bottom: 1px solid #d6e2d3;
+}
+.schedule__name { font-weight: 600; }
+.schedule__when { color: #5b6b58; }
