@@ -1,0 +1,78 @@
+/* ===== Tema global =====
+   Atribut data-theme dipasang di <html> oleh useTheme.js.
+   Variabel di bawah menimpa variabel bawaan template Vite (--bg, --text, dll)
+   supaya halaman lain (katalog, detail) ikut berubah. */
+
+:root[data-theme="light"] {
+  color-scheme: light;
+  --bg: #ffffff;
+  --text: #5b6b58;
+  --text-h: #1f2d1f;
+  --border: #d6e2d3;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #16171d;
+  --text: #a3a8b5;
+  --text-h: #f3f4f6;
+  --border: #2e303a;
+}
+
+:root[data-theme] {
+  background-color: var(--bg);
+  color: var(--text);
+}
+:root[data-theme] body {
+  background-color: var(--bg);
+  color: var(--text);
+}
+
+/* ===== Tombol toggle ===== */
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.3rem 0.45rem 0.3rem 0.85rem;
+  border: 1px solid var(--col-border, #d6e2d3);
+  border-radius: 999px;
+  background: var(--col-surface, #ffffff);
+  color: var(--col-text, #1f2d1f);
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+.theme-toggle__track {
+  position: relative;
+  width: 48px;
+  height: 26px;
+  border-radius: 999px;
+  border: 1px solid var(--col-border, #d6e2d3);
+  background: var(--col-surface-2, #f0f6f0);
+}
+.theme-toggle__knob {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  display: grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--col-accent, #2f6b3a);
+  font-size: 12px;
+  line-height: 1;
+  transition: transform 0.2s ease;
+}
+.theme-toggle[aria-checked="true"] .theme-toggle__knob {
+  transform: translateX(22px);
+}
+.theme-toggle:focus-visible {
+  outline: 3px solid var(--col-accent, #2f6b3a);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .theme-toggle__knob { transition: none; }
+}
