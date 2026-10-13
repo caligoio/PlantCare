@@ -10,7 +10,7 @@ function App() {
     <Routes>
       <Route path="/" element={<PlantListContainer />} />
       <Route path="/tanaman/:id" element={<PlantDetail />} />
-      <Route path="/koleksi" element={<p>Koleksi (segera hadir)</p>} />
+      <Route path="/koleksi" element={<CollectionContainer />} />
     </Routes>
   );
 }

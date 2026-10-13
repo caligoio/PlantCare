@@ -30,3 +30,21 @@
 .plant-detail .plant-emoji {
   font-size: 96px;
 }
+
+.plant-card__add { margin-top: 12px; }
+
+.plant-card__add button {
+  padding: 8px 14px;
+  border-radius: 8px;
+  border: 1px solid #2f6b3a;
+  background: #2f6b3a;
+  color: #fff;
+  cursor: pointer;
+}
+
+.plant-card__add button:focus-visible {
+  outline: 3px solid #9cc8a3;
+  outline-offset: 2px;
+}
+
+.plant-owned { margin: 8px 0 0; color: #2f6b3a; font-size: 0.9rem; }
