@@ -13,7 +13,7 @@ export default function ThemeToggle() {
       className="theme-toggle"
       onClick={toggleTheme}
     >
-      <span className="theme-toggle__label">Mode gelap</span>
+      <span className="theme-toggle__label">Ganti Theme</span>
       <span className="theme-toggle__track" aria-hidden="true">
         <span className="theme-toggle__knob">{isDark ? "🌙" : "☀️"}</span>
       </span>

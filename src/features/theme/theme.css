@@ -5,7 +5,7 @@
 
 :root[data-theme="light"] {
   color-scheme: light;
-  --bg: #ffffff;
+  --bg: #fdfdf1;
   --text: #5b6b58;
   --text-h: #1f2d1f;
   --border: #d6e2d3;
