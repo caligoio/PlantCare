@@ -1,0 +1,32 @@
+.collection { padding: 1.5rem; max-width: 1100px; margin: 0 auto; }
+.collection__section { margin-top: 2rem; }
+.collection__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 1rem;
+}
+.collection-card {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #d6e2d3;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #fff;
+}
+.collection-card__image { width: 100%; height: 160px; object-fit: cover; }
+.collection-card__body { padding: 0.9rem 1rem; flex: 1; }
+.collection-card__title { margin: 0 0 0.2rem; }
+.collection-card__species, .collection-card__date { margin: 0.15rem 0; color: #5b6b58; font-size: 0.9rem; }
+.collection-card__status { margin: 0.4rem 0 0; font-weight: 600; color: #2f6b3a; }
+.collection-card__status--due { color: #b3441f; }
+.collection-card__actions { display: flex; gap: 0.5rem; padding: 0 1rem 1rem; }
+.collection-card__actions button {
+  padding: 0.5rem 0.8rem;
+  border-radius: 8px;
+  border: 1px solid #2f6b3a;
+  background: #2f6b3a;
+  color: #fff;
+  cursor: pointer;
+}
+.collection-card__actions button:focus-visible { outline: 3px solid #9cc8a3; outline-offset: 2px; }
+.collection-card__actions .collection-card__remove { background: transparent; color: #2f6b3a; }
