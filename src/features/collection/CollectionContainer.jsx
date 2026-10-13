@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import useCollection from "./useCollection";
-import usePlants from "../../hooks/usePlants"; // hook milik Orang 1
+import plantsData from "../catalog/plantsData"; // data milik Orang 1 (sesuaikan path)
 import CollectionCard from "./CollectionCard";
 import WateringSchedule from "./WateringSchedule";
 import "./Collection.css";
@@ -9,12 +9,11 @@ import "./Collection.css";
 // ke komponen presentasi (Container-Presenter Pattern).
 export default function CollectionContainer() {
   const { collection, removeFromCollection, markAsWatered } = useCollection();
-  const { plants } = usePlants(); // ASUMSI: mengembalikan { plants: [...] }
 
   // Gabungkan item koleksi dengan data tanaman (berdasarkan plantId)
   const items = collection.map((entry) => ({
     ...entry,
-    plant: plants.find((p) => p.id === entry.plantId),
+    plant: plantsData.find((p) => p.id === entry.plantId),
   }));
 
   if (collection.length === 0) {

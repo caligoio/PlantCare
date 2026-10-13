@@ -1,5 +1,5 @@
 import usePlants from "./usePlants";
-import useCollection from "./features/collection/useCollection";
+import useCollection from "../collection/useCollection";
 import PlantCard from "./PlantCard";
 import "./Catalog.css";
 
