@@ -1,0 +1,32 @@
+.catalog {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 24px 16px;
+}
+
+.plant-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 16px;
+}
+
+.plant-card {
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  padding: 16px;
+  text-align: center;
+}
+
+.plant-emoji {
+  font-size: 48px;
+}
+
+.plant-detail {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 24px 16px;
+}
+
+.plant-detail .plant-emoji {
+  font-size: 96px;
+}
