@@ -1,11 +1,12 @@
 import { Link } from "react-router-dom";
-import useCollection, { isDueToday } from "./useCollection";
+import useCollection from "./useCollection";
 import usePlants from "../../hooks/usePlants"; // hook milik Orang 1
 import CollectionCard from "./CollectionCard";
+import WateringSchedule from "./WateringSchedule";
 import "./Collection.css";
 
 // Komponen container: mengambil data, menggabungkan, lalu menyerahkan
-// ke CollectionCard untuk ditampilkan (Container-Presenter Pattern).
+// ke komponen presentasi (Container-Presenter Pattern).
 export default function CollectionContainer() {
   const { collection, removeFromCollection, markAsWatered } = useCollection();
   const { plants } = usePlants(); // ASUMSI: mengembalikan { plants: [...] }
@@ -15,21 +16,6 @@ export default function CollectionContainer() {
     ...entry,
     plant: plants.find((p) => p.id === entry.plantId),
   }));
-
-  const dueToday = items.filter(
-    (item) => item.plant && isDueToday(item.lastWatered, item.plant.wateringIntervalDays)
-  );
-  const others = items.filter((item) => !dueToday.includes(item));
-
-  const renderCards = (list) =>
-    list.map((item) => (
-      <CollectionCard
-        key={item.id}
-        item={item}
-        onWatered={markAsWatered}
-        onRemove={removeFromCollection}
-      />
-    ));
 
   if (collection.length === 0) {
     return (
@@ -45,21 +31,25 @@ export default function CollectionContainer() {
     <section className="collection">
       <h2>Koleksi Saya</h2>
 
-      <div className="collection__section">
-        <h3>Perlu disiram hari ini ({dueToday.length})</h3>
-        {dueToday.length > 0 ? (
-          <div className="collection__grid">{renderCards(dueToday)}</div>
-        ) : (
-          <p>Semua tanaman sudah tercukupi airnya hari ini.</p>
-        )}
-      </div>
+      <WateringSchedule
+        items={items}
+        onWatered={markAsWatered}
+        onRemove={removeFromCollection}
+      />
 
-      {others.length > 0 && (
-        <div className="collection__section">
-          <h3>Semua koleksi</h3>
-          <div className="collection__grid">{renderCards(others)}</div>
+      <div className="collection__section">
+        <h3>Semua koleksi ({items.length})</h3>
+        <div className="collection__grid">
+          {items.map((item) => (
+            <CollectionCard
+              key={item.id}
+              item={item}
+              onWatered={markAsWatered}
+              onRemove={removeFromCollection}
+            />
+          ))}
         </div>
-      )}
+      </div>
     </section>
   );
 }

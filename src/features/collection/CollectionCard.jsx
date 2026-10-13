@@ -1,4 +1,4 @@
-import { daysUntilWatering } from "./useCollection";
+import { daysUntilWatering, formatDate } from "./wateringUtils";
 
 // Komponen presentasi: hanya menampilkan data & memanggil callback dari props.
 // Props:
@@ -27,10 +27,7 @@ export default function CollectionCard({ item, onWatered, onRemove }) {
     }
   }
 
-  const formattedDate = new Date(`${lastWatered}T00:00:00`).toLocaleDateString(
-    "id-ID",
-    { day: "numeric", month: "long", year: "numeric" }
-  );
+  const formattedDate = formatDate(lastWatered);
 
   return (
     <article className="collection-card">
