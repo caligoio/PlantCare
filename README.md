@@ -1,6 +1,7 @@
 # Plantcare
 
 Aplikasi web untuk membantu pengguna merawat tanaman lewat katalog tanaman, koleksi pribadi, dan pengingat jadwal penyiraman.
+Link Docker Repository: https://hub.docker.com/repository/docker/caligoio/plantcare
 
 ## Deskripsi Proyek
 

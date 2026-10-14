@@ -7,8 +7,10 @@ export function careTone(care) {
 }
 
 // Satu kartu tanaman di katalog.
-// onAdd = fungsi untuk menambah ke koleksi, owned = sudah ada di koleksi atau belum
-export default function PlantCard({ plant, onAdd, owned }) {
+//  plant      -> data tanaman
+//  onAdd      -> (plantId) => void, dipanggil saat tombol ditekan
+//  ownedCount -> jumlah tanaman ini yang sudah ada di koleksi
+export default function PlantCard({ plant, onAdd, ownedCount = 0 }) {
   return (
     <article className="cat-card">
       <div className="cat-card__header">
@@ -28,18 +30,27 @@ export default function PlantCard({ plant, onAdd, owned }) {
       <ul className="cat-chips">
         <li className="cat-chip">☀️ Cahaya {plant.light.toLowerCase()}</li>
         <li className="cat-chip">💧 Tiap {plant.wateringIntervalDays} hari</li>
+        {ownedCount > 0 && (
+          <li className="cat-pill cat-pill--ok" role="status">
+            ✓ Di koleksimu: {ownedCount}
+          </li>
+        )}
       </ul>
 
       <div className="cat-card__actions">
-        <button
-          type="button"
-          className="cat-btn cat-btn--primary cat-btn--full"
-          onClick={() => onAdd(plant.id)}
-          disabled={owned}
+        {onAdd && (
+          <button
+            type="button"
+            className="cat-btn cat-btn--primary cat-btn--full"
+            onClick={() => onAdd(plant.id)}
+          >
+            Tambah ke koleksi
+          </button>
+        )}
+        <Link
+          to={`/tanaman/${plant.id}`}
+          className="cat-btn cat-btn--outline cat-btn--full"
         >
-          {owned ? "Sudah di koleksi" : "Tambah ke koleksi"}
-        </button>
-        <Link to={`/tanaman/${plant.id}`} className="cat-btn cat-btn--outline cat-btn--full">
           Lihat detail
         </Link>
       </div>

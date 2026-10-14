@@ -4,13 +4,15 @@ import PlantCard from "./PlantCard";
 import "./Catalog.css";
 
 // Halaman katalog: ambil data dari hook, lalu tampilkan satu kartu per tanaman.
+// useCollection dipanggil SEKALI di sini, lalu fungsinya dikirim lewat props,
+// supaya state koleksi tidak terduplikasi di setiap kartu.
 export default function PlantListContainer() {
   const { plants } = usePlants();
-
-  // Hook koleksi dipanggil SEKALI di sini, lalu dibagikan ke semua kartu.
-  // (Kalau dipanggil di tiap kartu, datanya bisa saling menimpa.)
   const { collection, addToCollection } = useCollection();
-  const ownedIds = new Set(collection.map((item) => item.plantId));
+
+  // Berapa kali tanaman ini ada di koleksi
+  const countOwned = (plantId) =>
+    collection.filter((item) => item.plantId === plantId).length;
 
   const easyCount = plants.filter((p) => p.care === "Mudah").length;
 
@@ -41,7 +43,7 @@ export default function PlantListContainer() {
             key={plant.id}
             plant={plant}
             onAdd={addToCollection}
-            owned={ownedIds.has(plant.id)}
+            ownedCount={countOwned(plant.id)}
           />
         ))}
       </div>

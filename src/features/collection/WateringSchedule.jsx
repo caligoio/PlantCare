@@ -33,9 +33,12 @@ export default function WateringSchedule({ items, onWatered, onRemove }) {
   );
 
   return (
-    <section className="schedule">
-      <div className="schedule__block">
-        <h3>Perlu disiram hari ini ({dueToday.length})</h3>
+    <div className="schedule">
+      <section className="collection__section">
+        <h3 className="collection__heading">
+          Perlu disiram hari ini
+          <span className="badge">{dueToday.length}</span>
+        </h3>
         {dueToday.length > 0 ? (
           <div className="collection__grid">
             {dueToday.map((item) => (
@@ -48,12 +51,18 @@ export default function WateringSchedule({ items, onWatered, onRemove }) {
             ))}
           </div>
         ) : (
-          <p>Semua tanaman sudah tercukupi airnya hari ini.</p>
+          <p className="collection__note">
+            <span aria-hidden="true">✅</span> Semua tanaman sudah tercukupi
+            airnya hari ini.
+          </p>
         )}
-      </div>
+      </section>
 
-      <div className="schedule__block">
-        <h3>Jadwal {UPCOMING_DAYS} hari ke depan</h3>
+      <section className="collection__section">
+        <h3 className="collection__heading">
+          Jadwal {UPCOMING_DAYS} hari ke depan
+          <span className="badge">{upcoming.length}</span>
+        </h3>
         {upcoming.length > 0 ? (
           <ul className="schedule__list">
             {upcoming.map((item) => {
@@ -68,18 +77,28 @@ export default function WateringSchedule({ items, onWatered, onRemove }) {
               );
               return (
                 <li key={item.id} className="schedule__item">
-                  <span className="schedule__name">{nickname || plant.name}</span>
-                  <span className="schedule__when">
-                    {formatDate(nextDate, true)} ({left} hari lagi)
+                  <span className="schedule__emoji" aria-hidden="true">
+                    {plant.emoji}
                   </span>
+                  <span className="schedule__info">
+                    <span className="schedule__name">
+                      {nickname || plant.name}
+                    </span>
+                    <span className="schedule__when">
+                      {formatDate(nextDate, true)}
+                    </span>
+                  </span>
+                  <span className="pill pill--ok">{left} hari lagi</span>
                 </li>
               );
             })}
           </ul>
         ) : (
-          <p>Belum ada jadwal penyiraman dalam {UPCOMING_DAYS} hari ke depan.</p>
+          <p className="collection__note">
+            Belum ada jadwal penyiraman dalam {UPCOMING_DAYS} hari ke depan.
+          </p>
         )}
-      </div>
-    </section>
+      </section>
+    </div>
   );
 }

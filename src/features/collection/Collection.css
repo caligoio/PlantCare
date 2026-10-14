@@ -1,45 +1,305 @@
-.collection { padding: 1.5rem; max-width: 1100px; margin: 0 auto; }
-.collection__section { margin-top: 2rem; }
+/* ===== Palet (terang) ===== */
+.collection {
+  --col-surface: #ffffff;
+  --col-surface-2: #f0f6f0;
+  --col-border: #d6e2d3;
+  --col-text: #1f2d1f;
+  --col-muted: #5b6b58;
+  --col-accent: #2f6b3a;
+  --col-accent-contrast: #ffffff;
+  --col-ok-bg: #e3f3e5;
+  --col-ok-text: #256033;
+  --col-warn-bg: #fff1d6;
+  --col-warn-text: #8a5a00;
+  --col-danger-bg: #fde4dd;
+  --col-danger-text: #a8361a;
+  --col-shadow: rgba(20, 40, 20, 0.12);
+
+  width: 100%;
+  box-sizing: border-box;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 2rem 1.25rem 4rem;
+  text-align: left;
+  color: var(--col-text);
+}
+
+/* ===== Palet (gelap), aktif saat <html data-theme="dark"> ===== */
+:root[data-theme="dark"] .collection {
+  --col-surface: #1d2820;
+  --col-surface-2: #16201a;
+  --col-border: #2f4034;
+  --col-text: #eaf3ea;
+  --col-muted: #a3b5a5;
+  --col-accent: #5fbf74;
+  --col-accent-contrast: #0e1a11;
+  --col-ok-bg: #1d3a26;
+  --col-ok-text: #8fe0a2;
+  --col-warn-bg: #3b2f10;
+  --col-warn-text: #f3c969;
+  --col-danger-bg: #42201a;
+  --col-danger-text: #ff9d85;
+  --col-shadow: rgba(0, 0, 0, 0.45);
+}
+
+/* ===== Header halaman ===== */
+.collection__header h2 {
+  margin: 0;
+  font-size: 2rem;
+  line-height: 1.2;
+  color: var(--col-text);
+}
+.collection__header p {
+  margin: 0.35rem 0 0;
+  color: var(--col-muted);
+}
+
+/* ===== Ringkasan ===== */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+}
+.stat {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  padding: 1rem 1.1rem;
+  background: var(--col-surface);
+  border: 1px solid var(--col-border);
+  border-radius: 14px;
+}
+.stat__value {
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--col-accent);
+}
+.stat__label { font-size: 0.9rem; color: var(--col-muted); }
+.stat--alert { background: var(--col-danger-bg); border-color: var(--col-danger-text); }
+.stat--alert .stat__value { color: var(--col-danger-text); }
+
+/* ===== Section ===== */
+.collection__section { margin-top: 2.25rem; }
+.collection__heading {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin: 0 0 1rem;
+  font-size: 1.2rem;
+  color: var(--col-text);
+}
+.badge {
+  min-width: 1.6rem;
+  padding: 0.1rem 0.5rem;
+  border-radius: 999px;
+  background: var(--col-surface-2);
+  border: 1px solid var(--col-border);
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-align: center;
+  color: var(--col-muted);
+}
+.collection__note {
+  margin: 0;
+  padding: 0.9rem 1rem;
+  background: var(--col-surface);
+  border: 1px dashed var(--col-border);
+  border-radius: 12px;
+  color: var(--col-muted);
+}
+/* 3 kartu per baris di desktop, 2 di tablet, 1 di layar kecil */
 .collection__grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 1rem;
 }
+@media (max-width: 900px) {
+  .collection__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 600px) {
+  .collection__grid { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* ===== Keadaan kosong ===== */
+.collection__empty {
+  margin-top: 2rem;
+  padding: 3rem 1.5rem;
+  text-align: center;
+  background: var(--col-surface);
+  border: 1px dashed var(--col-border);
+  border-radius: 18px;
+}
+.collection__empty-emoji { font-size: 64px; line-height: 1; }
+.collection__empty h3 { margin: 0.75rem 0 0.25rem; color: var(--col-text); }
+.collection__empty p { margin: 0 0 1.25rem; color: var(--col-muted); }
+
+/* ===== Kartu koleksi ===== */
 .collection-card {
   display: flex;
   flex-direction: column;
-  border: 1px solid #d6e2d3;
-  border-radius: 12px;
-  overflow: hidden;
-  background: #fff;
+  gap: 0.9rem;
+  padding: 1.1rem;
+  background: var(--col-surface);
+  border: 1px solid var(--col-border);
+  border-radius: 16px;
+  box-shadow: 0 1px 3px var(--col-shadow);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
-.collection-card__image { width: 100%; height: 160px; object-fit: cover; }
-.collection-card__body { padding: 0.9rem 1rem; flex: 1; }
-.collection-card__title { margin: 0 0 0.2rem; }
-.collection-card__species, .collection-card__date { margin: 0.15rem 0; color: #5b6b58; font-size: 0.9rem; }
-.collection-card__status { margin: 0.4rem 0 0; font-weight: 600; color: #2f6b3a; }
-.collection-card__status--due { color: #b3441f; }
-.collection-card__actions { display: flex; gap: 0.5rem; padding: 0 1rem 1rem; }
-.collection-card__actions button {
-  padding: 0.5rem 0.8rem;
-  border-radius: 8px;
-  border: 1px solid #2f6b3a;
-  background: #2f6b3a;
-  color: #fff;
-  cursor: pointer;
+.collection-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px var(--col-shadow);
 }
-.collection-card__actions button:focus-visible { outline: 3px solid #9cc8a3; outline-offset: 2px; }
-.collection-card__actions .collection-card__remove { background: transparent; color: #2f6b3a; }
+.collection-card--due { border-color: var(--col-danger-text); }
 
-/* ---- Jadwal siram ---- */
-.schedule__block { margin-top: 2rem; }
-.schedule__list { list-style: none; margin: 0; padding: 0; }
+.collection-card__header { display: flex; align-items: center; gap: 0.9rem; }
+.collection-card__emoji {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--col-surface-2);
+  font-size: 30px;
+}
+.collection-card__title { margin: 0; font-size: 1.1rem; color: var(--col-text); }
+.collection-card__species { margin: 0.1rem 0 0; font-size: 0.85rem; color: var(--col-muted); }
+
+.collection-card__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.chip {
+  padding: 0.2rem 0.65rem;
+  border-radius: 999px;
+  background: var(--col-surface-2);
+  border: 1px solid var(--col-border);
+  font-size: 0.8rem;
+  color: var(--col-muted);
+}
+
+.collection-card__schedule { display: flex; flex-direction: column; gap: 0.5rem; }
+.collection-card__date { margin: 0; font-size: 0.88rem; color: var(--col-muted); }
+
+/* ===== Label status ===== */
+.pill {
+  align-self: flex-start;
+  padding: 0.2rem 0.7rem;
+  border-radius: 999px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.pill--ok { background: var(--col-ok-bg); color: var(--col-ok-text); }
+.pill--warn { background: var(--col-warn-bg); color: var(--col-warn-text); }
+.pill--danger { background: var(--col-danger-bg); color: var(--col-danger-text); }
+
+/* ===== Progres siklus siram ===== */
+.progress {
+  height: 6px;
+  border-radius: 999px;
+  background: var(--col-surface-2);
+  overflow: hidden;
+}
+.progress__fill {
+  height: 100%;
+  border-radius: 999px;
+  background: var(--col-accent);
+  transition: width 0.3s ease;
+}
+.progress__fill--due { background: var(--col-danger-text); }
+
+/* ===== Tombol ===== */
+.collection-card__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: auto;
+}
+.collection .btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  flex: 1 1 auto;
+  padding: 0.55rem 0.9rem;
+  border: 1px solid var(--col-accent);
+  border-radius: 10px;
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 600;
+  line-height: 1.2;
+  text-decoration: none;
+  cursor: pointer;
+  transition: filter 0.15s ease, background 0.15s ease;
+}
+.collection .btn--full { flex-basis: 100%; }
+.collection .btn--primary,
+.collection .btn--primary:hover {
+  background: var(--col-accent);
+  color: var(--col-accent-contrast);
+}
+.collection .btn--primary:hover { filter: brightness(1.08); }
+.collection .btn--outline,
+.collection .btn--outline:hover {
+  background: transparent;
+  color: var(--col-accent);
+}
+.collection .btn--outline:hover { background: var(--col-surface-2); }
+.collection .btn--ghost,
+.collection .btn--ghost:hover {
+  background: transparent;
+  border-color: var(--col-border);
+  color: var(--col-danger-text);
+}
+.collection .btn--ghost:hover { background: var(--col-danger-bg); }
+.collection .btn:focus-visible {
+  outline: 3px solid var(--col-accent);
+  outline-offset: 2px;
+}
+
+/* ===== Daftar jadwal ===== */
+.schedule__list { margin: 0; padding: 0; list-style: none; display: grid; gap: 0.6rem; }
 .schedule__item {
   display: flex;
-  justify-content: space-between;
-  gap: 1rem;
-  padding: 0.6rem 0;
-  border-bottom: 1px solid #d6e2d3;
+  align-items: center;
+  gap: 0.9rem;
+  padding: 0.75rem 1rem;
+  background: var(--col-surface);
+  border: 1px solid var(--col-border);
+  border-radius: 14px;
 }
-.schedule__name { font-weight: 600; }
-.schedule__when { color: #5b6b58; }
+.schedule__emoji {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: var(--col-surface-2);
+  font-size: 22px;
+}
+.schedule__info { display: flex; flex: 1; flex-direction: column; min-width: 0; }
+.schedule__name { font-weight: 600; color: var(--col-text); }
+.schedule__when { font-size: 0.85rem; color: var(--col-muted); }
+
+@media (prefers-reduced-motion: reduce) {
+  .collection-card, .progress__fill, .collection .btn { transition: none; }
+  .collection-card:hover { transform: none; }
+}
+
+/* ===== Baris atas (kembali + toggle tema) ===== */
+.collection__topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+.collection .collection__topbar .btn { flex: 0 0 auto; }
