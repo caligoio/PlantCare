@@ -314,3 +314,15 @@
 }
 
 .plant-owned { margin: 8px 0 0; color: #2f6b3a; font-size: 0.9rem; }
+
+.cat-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+.cat-topbar--end {
+  justify-content: flex-end;
+}

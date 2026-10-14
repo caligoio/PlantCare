@@ -2,6 +2,7 @@ import usePlants from "./usePlants";
 import useCollection from "../collection/useCollection";
 import PlantCard from "./PlantCard";
 import "./Catalog.css";
+import ThemeToggle from "../theme/ThemeToggle";
 
 // Halaman katalog: ambil data dari hook, lalu tampilkan satu kartu per tanaman.
 // useCollection dipanggil SEKALI di sini, lalu fungsinya dikirim lewat props,
@@ -18,6 +19,9 @@ export default function PlantListContainer() {
 
   return (
     <section className="cat-page">
+        <div className="cat-topbar cat-topbar--end">
+            <ThemeToggle />
+        </div>
       <header className="cat-header">
         <h2>Katalog Tanaman</h2>
         <p>Pilih tanaman, lihat kebutuhan cahaya dan jadwal siramnya.</p>

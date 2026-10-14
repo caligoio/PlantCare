@@ -2,6 +2,7 @@ import { useParams, Link } from "react-router-dom";
 import usePlants from "./features/catalog/usePlants";
 import { careTone } from "./features/catalog/PlantCard";
 import "./features/catalog/Catalog.css";
+import ThemeToggle from "./features/theme/ThemeToggle";
 
 export default function PlantDetail() {
   // Ambil "id" dari alamat URL, contoh: /tanaman/3 -> id = "3"
@@ -29,8 +30,9 @@ export default function PlantDetail() {
     <article className="cat-page">
       <div className="cat-topbar">
         <Link to="/" className="cat-btn cat-btn--outline">
-          Kembali ke katalog
+          ← Kembali ke katalog
         </Link>
+         <ThemeToggle />
       </div>
 
       <div className="cat-detail">
