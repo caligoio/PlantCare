@@ -1,19 +1,32 @@
-
-
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, NavLink } from "react-router-dom";
 import PlantListContainer from "./features/catalog/PlantListContainer";
-import PlantDetail from "./PlantDetail.jsx";
+import PlantDetail from "./PlantDetail";
 import CollectionContainer from "./features/collection/CollectionContainer";
-import ThemeToggle from "./features/theme/ThemeToggle";
-import "./App.css";
+import "./theme.css";
 
 function App() {
   return (
-    <Routes>
-      <Route path="/" element={<PlantListContainer />} />
-      <Route path="/tanaman/:id" element={<PlantDetail />} />
-      <Route path="/koleksi" element={<CollectionContainer />} />
-    </Routes>
+    <>
+      <header className="site-header">
+        <NavLink to="/" className="site-header__brand">
+          🌿 PlantCare
+        </NavLink>
+        <nav className="site-header__nav">
+          <NavLink to="/" end className="site-header__link">
+            Katalog
+          </NavLink>
+          <NavLink to="/koleksi" className="site-header__link">
+            Koleksi Saya
+          </NavLink>
+        </nav>
+      </header>
+
+      <Routes>
+        <Route path="/" element={<PlantListContainer />} />
+        <Route path="/tanaman/:id" element={<PlantDetail />} />
+        <Route path="/koleksi" element={<CollectionContainer />} />
+      </Routes>
+    </>
   );
 }
 

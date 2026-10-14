@@ -13,7 +13,7 @@ const plants = [
   {
     id: 2,
     name: "Lidah Mertua",
-    emoji: "🪴",
+    emoji: "🌾",
     description: "Sangat tahan banting dan cocok untuk pemula, jarang perlu disiram.",
     light: "Rendah",
     care: "Mudah",
