@@ -132,6 +132,7 @@
   color: var(--col-muted);
   display: -webkit-box;
   -webkit-line-clamp: 3;
+  line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
@@ -153,8 +154,12 @@
 }
 .cat-card__actions {
   display: flex;
+  flex-wrap: wrap;
   gap: 0.5rem;
   margin-top: auto;
+}
+.cat-btn--full {
+  flex-basis: 100%;
 }
 
 /* ===== Label tingkat perawatan ===== */
@@ -210,6 +215,11 @@
 }
 .cat-btn--outline:hover {
   background: var(--col-surface-2);
+}
+.cat-btn:disabled {
+  opacity: 0.6;
+  cursor: default;
+  filter: none;
 }
 .cat-btn:focus-visible {
   outline: 3px solid var(--col-accent);
