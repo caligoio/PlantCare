@@ -3,6 +3,8 @@ import PlantListContainer from "./features/catalog/PlantListContainer";
 import PlantDetail from "./PlantDetail";
 import CollectionContainer from "./features/collection/CollectionContainer";
 import "./theme.css";
+import LoginPage from "./features/auth/LoginPage";
+import RegisterPage from "./features/auth/RegisterPage";
 
 function App() {
   return (
@@ -25,6 +27,8 @@ function App() {
         <Route path="/" element={<PlantListContainer />} />
         <Route path="/tanaman/:id" element={<PlantDetail />} />
         <Route path="/koleksi" element={<CollectionContainer />} />
+        <Route path="/masuk" element={<LoginPage />} />
+        <Route path="/daftar" element={<RegisterPage />} />
       </Routes>
     </>
   );
