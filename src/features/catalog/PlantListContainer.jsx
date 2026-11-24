@@ -8,8 +8,29 @@ import ThemeToggle from "../theme/ThemeToggle";
 // useCollection dipanggil SEKALI di sini, lalu fungsinya dikirim lewat props,
 // supaya state koleksi tidak terduplikasi di setiap kartu.
 export default function PlantListContainer() {
-  const { plants } = usePlants();
+  // Semua hook dipanggil di atas, sebelum return bersyarat
+  const { plants, loading, error, reload } = usePlants();
   const { collection, addToCollection } = useCollection();
+
+  // Keadaan sedang memuat dan gagal memuat (data kini datang dari API)
+  if (loading) {
+    return (
+      <section className="cat-page">
+        <p role="status">Memuat katalog…</p>
+      </section>
+    );
+  }
+
+  if (error) {
+    return (
+      <section className="cat-page">
+        <p role="alert">{error}</p>
+        <button type="button" onClick={reload}>
+          Coba lagi
+        </button>
+      </section>
+    );
+  }
 
   // Berapa kali tanaman ini ada di koleksi
   const countOwned = (plantId) =>
@@ -19,9 +40,10 @@ export default function PlantListContainer() {
 
   return (
     <section className="cat-page">
-        <div className="cat-topbar cat-topbar--end">
-            <ThemeToggle />
-        </div>
+      <div className="cat-topbar cat-topbar--end">
+        <ThemeToggle />
+      </div>
+
       <header className="cat-header">
         <h2>Katalog Tanaman</h2>
         <p>Pilih tanaman, lihat kebutuhan cahaya dan jadwal siramnya.</p>
