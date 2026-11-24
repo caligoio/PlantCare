@@ -1,0 +1,41 @@
+@host = http://localhost:3000
+@id = 5
+
+### 1. Lihat koleksi (awalnya [] dan status 200)
+GET {{host}}/api/collection
+
+### 2. Tambah tanaman ke koleksi (status 201)
+POST {{host}}/api/collection
+Content-Type: application/json
+
+{ "plantId": 1, "lastWatered": "2026-11-24" }
+
+### 3. Tandai sudah disiram (lastWatered berubah)
+PATCH {{host}}/api/collection/{{id}}/water
+Content-Type: application/json
+
+{ "lastWatered": "2026-11-25" }
+
+### 4. Ganti nama panggilan
+PATCH {{host}}/api/collection/{{id}}
+Content-Type: application/json
+
+{ "nickname": "Monstera Kamar" }
+
+### 5. Error: plantId tidak ada (harus 404)
+POST {{host}}/api/collection
+Content-Type: application/json
+
+{ "plantId": 9999, "lastWatered": "2026-11-24" }
+
+### 6. Error: format tanggal salah (harus 400)
+POST {{host}}/api/collection
+Content-Type: application/json
+
+{ "plantId": 1, "lastWatered": "24-11-2026" }
+
+### 7. Hapus item (status 204)
+DELETE {{host}}/api/collection/{{id}}
+
+### 8. Hapus lagi, item sudah tidak ada (harus 404)
+DELETE {{host}}/api/collection/{{id}}
