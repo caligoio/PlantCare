@@ -17,3 +17,17 @@ CREATE TABLE IF NOT EXISTS collection (
 );
 
 CREATE INDEX IF NOT EXISTS idx_collection_plant_id ON collection(plant_id);
+
+-- ===== Autentikasi =====
+CREATE TABLE IF NOT EXISTS users (
+  id            SERIAL PRIMARY KEY,
+  name          VARCHAR(100) NOT NULL,
+  email         VARCHAR(255) NOT NULL UNIQUE,
+  password_hash TEXT         NOT NULL,
+  created_at    TIMESTAMPTZ  NOT NULL DEFAULT NOW()
+);
+
+ALTER TABLE collection
+  ADD COLUMN IF NOT EXISTS user_id INTEGER REFERENCES users(id) ON DELETE CASCADE;
+
+CREATE INDEX IF NOT EXISTS idx_collection_user_id ON collection(user_id);
