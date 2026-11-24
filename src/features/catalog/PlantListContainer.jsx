@@ -1,5 +1,6 @@
 import usePlants from "./usePlants";
 import useCollection from "../collection/useCollection";
+import useAuth from "../auth/useAuth";
 import PlantCard from "./PlantCard";
 import "./Catalog.css";
 import ThemeToggle from "../theme/ThemeToggle";
@@ -11,6 +12,7 @@ export default function PlantListContainer() {
   // Semua hook dipanggil di atas, sebelum return bersyarat
   const { plants, loading, error, reload } = usePlants();
   const { collection, addToCollection } = useCollection();
+  const { user, loading: authLoading } = useAuth();
 
   // Keadaan sedang memuat dan gagal memuat (data kini datang dari API)
   if (loading) {
@@ -32,9 +34,9 @@ export default function PlantListContainer() {
     );
   }
 
-  // Berapa kali tanaman ini ada di koleksi
+  // Berapa kali tanaman ini ada di koleksi (selalu 0 kalau belum login)
   const countOwned = (plantId) =>
-    collection.filter((item) => item.plantId === plantId).length;
+    user ? collection.filter((item) => item.plantId === plantId).length : 0;
 
   const easyCount = plants.filter((p) => p.care === "Mudah").length;
 
@@ -68,7 +70,8 @@ export default function PlantListContainer() {
           <PlantCard
             key={plant.id}
             plant={plant}
-            onAdd={addToCollection}
+            onAdd={user ? addToCollection : undefined}
+            loginRequired={!authLoading && !user}
             ownedCount={countOwned(plant.id)}
           />
         ))}

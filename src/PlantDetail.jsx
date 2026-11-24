@@ -1,4 +1,4 @@
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate, useLocation } from "react-router-dom";
 import usePlants from "./features/catalog/usePlants";
 import { careTone } from "./features/catalog/PlantCard";
 import "./features/catalog/Catalog.css";
@@ -8,9 +8,22 @@ export default function PlantDetail() {
   // Ambil "id" dari alamat URL, contoh: /tanaman/3 -> id = "3"
   const { id } = useParams();
   const { plants } = usePlants();
+  const navigate = useNavigate();
+  const location = useLocation();
 
   // id dari URL itu string, jadi diubah ke angka dengan Number()
   const plant = plants.find((p) => p.id === Number(id));
+
+  // Kembali ke halaman sebelumnya (katalog atau koleksi, sesuai asal pengguna).
+  // location.key === "default" berarti halaman ini dibuka langsung (tidak ada
+  // riwayat di dalam aplikasi), jadi arahkan ke katalog.
+  function handleBack() {
+    if (location.key === "default") {
+      navigate("/");
+    } else {
+      navigate(-1);
+    }
+  }
 
   if (!plant) {
     return (
@@ -29,10 +42,14 @@ export default function PlantDetail() {
   return (
     <article className="cat-page">
       <div className="cat-topbar">
-        <Link to="/" className="cat-btn cat-btn--outline">
-          ← Kembali ke katalog
-        </Link>
-         <ThemeToggle />
+        <button
+          type="button"
+          className="cat-btn cat-btn--outline"
+          onClick={handleBack}
+        >
+          ← Kembali
+        </button>
+        <ThemeToggle />
       </div>
 
       <div className="cat-detail">

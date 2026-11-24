@@ -189,6 +189,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  text-align: center; /* centers wrapped lines of text */
   gap: 0.4rem;
   flex: 1 1 auto;
   padding: 0.55rem 0.9rem;

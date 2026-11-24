@@ -34,7 +34,8 @@ async function request(path = "", options = {}) {
 // Hooks Pattern: semua akses data koleksi ada di sini.
 // Fungsi aksi melempar error, jadi komponen yang memanggil bisa menampilkan pesannya.
 export default function useCollection() {
-  const { clearSession } = useAuth();
+  const { user, clearSession } = useAuth();
+  const userId = user?.id ?? null;
   const [collection, setCollection] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -54,6 +55,13 @@ export default function useCollection() {
   );
 
   const load = useCallback(async () => {
+    // Belum login: tidak ada koleksi, tidak perlu memanggil API
+    if (userId === null) {
+      setCollection([]);
+      setError(null);
+      setLoading(false);
+      return;
+    }
     setLoading(true);
     setError(null);
     try {
@@ -63,7 +71,7 @@ export default function useCollection() {
     } finally {
       setLoading(false);
     }
-  }, [call]);
+  }, [call, userId]);
 
   useEffect(() => {
     load();

@@ -7,10 +7,16 @@ export function careTone(care) {
 }
 
 // Satu kartu tanaman di katalog.
-//  plant      -> data tanaman
-//  onAdd      -> (plantId) => void, dipanggil saat tombol ditekan
-//  ownedCount -> jumlah tanaman ini yang sudah ada di koleksi
-export default function PlantCard({ plant, onAdd, ownedCount = 0 }) {
+//  plant         -> data tanaman
+//  onAdd         -> (plantId) => void, dipanggil saat tombol ditekan
+//  ownedCount    -> jumlah tanaman ini yang sudah ada di koleksi
+//  loginRequired -> true kalau pengguna belum login (tombol tambah diganti tautan masuk)
+export default function PlantCard({
+  plant,
+  onAdd,
+  ownedCount = 0,
+  loginRequired = false,
+}) {
   return (
     <article className="cat-card">
       <div className="cat-card__header">
@@ -38,14 +44,24 @@ export default function PlantCard({ plant, onAdd, ownedCount = 0 }) {
       </ul>
 
       <div className="cat-card__actions">
-        {onAdd && (
-          <button
-            type="button"
-            className="cat-btn cat-btn--primary cat-btn--full"
-            onClick={() => onAdd(plant.id)}
+        {loginRequired ? (
+          <Link
+            to="/masuk"
+            state={{ from: "/" }}
+            className="cat-btn cat-btn--outline cat-btn--full"
           >
-            Tambah ke koleksi
-          </button>
+            Masuk untuk menambahkan ke koleksi
+          </Link>
+        ) : (
+          onAdd && (
+            <button
+              type="button"
+              className="cat-btn cat-btn--primary cat-btn--full"
+              onClick={() => onAdd(plant.id)}
+            >
+              Tambah ke koleksi
+            </button>
+          )
         )}
         <Link
           to={`/tanaman/${plant.id}`}

@@ -1,7 +1,11 @@
 import { Router } from "express";
 import { pool } from "../db.js";
+import requireAuth from "../middleware/requireAuth.js";
 
 const router = Router();
+
+// Every collection route requires login (401 otherwise)
+router.use(requireAuth);
 
 // Kolom dikembalikan sesuai kontrak: camelCase, tanggal sebagai string YYYY-MM-DD.
 // to_char dipakai supaya tanggal tidak bergeser satu hari karena zona waktu.
@@ -45,11 +49,14 @@ function serverError(res, err) {
   res.status(500).json({ message: "Terjadi kesalahan pada server." });
 }
 
-// GET /api/collection
+// GET /api/collection  -> hanya koleksi milik pengguna yang login
 router.get("/", async (req, res) => {
   try {
     const { rows } = await pool.query(
-      `SELECT ${COLUMNS} FROM collection ORDER BY created_at DESC, id DESC`
+      `SELECT ${COLUMNS} FROM collection
+       WHERE user_id = $1
+       ORDER BY created_at DESC, id DESC`,
+      [req.user.id]
     );
     res.json(rows);
   } catch (err) {
@@ -79,10 +86,10 @@ router.post("/", async (req, res) => {
     }
 
     const { rows } = await pool.query(
-      `INSERT INTO collection (plant_id, nickname, last_watered)
-       VALUES ($1, $2, $3)
+      `INSERT INTO collection (plant_id, nickname, last_watered, user_id)
+       VALUES ($1, $2, $3, $4)
        RETURNING ${COLUMNS}`,
-      [plantId, nick.value, lastWatered]
+      [plantId, nick.value, lastWatered, req.user.id]
     );
     res.status(201).json(rows[0]);
   } catch (err) {
@@ -102,8 +109,10 @@ router.patch("/:id/water", async (req, res) => {
     }
 
     const { rows } = await pool.query(
-      `UPDATE collection SET last_watered = $1 WHERE id = $2 RETURNING ${COLUMNS}`,
-      [lastWatered, id]
+      `UPDATE collection SET last_watered = $1
+       WHERE id = $2 AND user_id = $3
+       RETURNING ${COLUMNS}`,
+      [lastWatered, id, req.user.id]
     );
     if (rows.length === 0) {
       return res.status(404).json({ message: "Item koleksi tidak ditemukan." });
@@ -126,8 +135,10 @@ router.patch("/:id", async (req, res) => {
     }
 
     const { rows } = await pool.query(
-      `UPDATE collection SET nickname = $1 WHERE id = $2 RETURNING ${COLUMNS}`,
-      [nick.value, id]
+      `UPDATE collection SET nickname = $1
+       WHERE id = $2 AND user_id = $3
+       RETURNING ${COLUMNS}`,
+      [nick.value, id, req.user.id]
     );
     if (rows.length === 0) {
       return res.status(404).json({ message: "Item koleksi tidak ditemukan." });
@@ -144,7 +155,10 @@ router.delete("/:id", async (req, res) => {
     const id = parseId(req, res);
     if (id === null) return;
 
-    const result = await pool.query("DELETE FROM collection WHERE id = $1", [id]);
+    const result = await pool.query(
+      "DELETE FROM collection WHERE id = $1 AND user_id = $2",
+      [id, req.user.id]
+    );
     if (result.rowCount === 0) {
       return res.status(404).json({ message: "Item koleksi tidak ditemukan." });
     }
