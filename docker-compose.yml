@@ -1,0 +1,39 @@
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: ${DB_USER:-plantcare}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-plantcare_pass}
+      POSTGRES_DB: ${DB_NAME:-plantcare}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  backend:
+    build: ./backend
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_USER: ${DB_USER:-plantcare}
+      DB_PASSWORD: ${DB_PASSWORD:-plantcare_pass}
+      DB_NAME: ${DB_NAME:-plantcare}
+      PORT: 3000
+    ports:
+      - "3000:3000"   # dibuka agar bisa diuji langsung dan dipakai proxy Vite saat npm run dev
+    depends_on:
+      db:
+        condition: service_healthy
+
+  frontend:
+    build: .
+    ports:
+      - "8080:80"
+    depends_on:
+      - backend
+
+volumes:
+  pgdata:
