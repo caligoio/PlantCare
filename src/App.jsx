@@ -7,8 +7,7 @@ import RegisterPage from "./features/auth/RegisterPage";
 import ProtectedRoute from "./features/auth/ProtectedRoute";
 import useAuth from "./features/auth/useAuth";
 import "./theme.css";
-import LoginPage from "./features/auth/LoginPage";
-import RegisterPage from "./features/auth/RegisterPage";
+
 
 function App() {
   const { user, loading, logout } = useAuth();
