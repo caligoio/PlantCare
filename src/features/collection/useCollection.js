@@ -1,91 +1,96 @@
-import { useState, useEffect, useCallback } from "react";
-import { todayString } from "./wateringUtils";
+import { useCallback, useEffect, useState } from "react";
 
-// Kesepakatan tim: key localStorage harus persis seperti ini.
-const STORAGE_KEY = "plantCollection";
+const API_URL = "/api/collection";
 
-/* ---------- Akses localStorage ---------- */
-
-function readStorage() {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    const parsed = raw ? JSON.parse(raw) : [];
-    return Array.isArray(parsed) ? parsed : [];
-  } catch {
-    return [];
-  }
+// Tanggal lokal pengguna dalam format YYYY-MM-DD (bukan UTC),
+// supaya "sudah disiram hari ini" tidak mundur satu hari.
+function todayLocal() {
+  return new Date().toLocaleDateString("en-CA");
 }
 
-function writeStorage(items) {
-  try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
-  } catch (error) {
-    console.error("Gagal menyimpan koleksi:", error);
+async function request(path = "", options = {}) {
+  const response = await fetch(`${API_URL}${path}`, {
+    headers: { "Content-Type": "application/json" },
+    ...options,
+  });
+
+  if (!response.ok) {
+    let message = "Permintaan gagal. Coba lagi.";
+    try {
+      const body = await response.json();
+      if (body.message) message = body.message;
+    } catch {
+      // body bukan JSON, pakai pesan bawaan
+    }
+    throw new Error(message);
   }
+
+  return response.status === 204 ? null : response.json();
 }
 
-/* ---------- Hook utama ---------- */
-
-/**
- * Bentuk satu item (sesuai kesepakatan tim):
- * { id, plantId, nickname, lastWatered }
- */
+// Hooks Pattern: semua akses data koleksi ada di sini.
+// Fungsi aksi melempar error, jadi komponen yang memanggil bisa menampilkan pesannya.
 export default function useCollection() {
-  const [collection, setCollection] = useState(readStorage);
+  const [collection, setCollection] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  // Simpan ke localStorage setiap koleksi berubah
+  const load = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      setCollection(await request());
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
   useEffect(() => {
-    writeStorage(collection);
-  }, [collection]);
+    load();
+  }, [load]);
 
-  // Sinkron jika koleksi diubah dari tab browser lain
-  useEffect(() => {
-    const onStorage = (e) => {
-      if (e.key === STORAGE_KEY) setCollection(readStorage());
-    };
-    window.addEventListener("storage", onStorage);
-    return () => window.removeEventListener("storage", onStorage);
-  }, []);
+  const addToCollection = async (plantId, nickname) => {
+    const item = await request("", {
+      method: "POST",
+      body: JSON.stringify({ plantId, nickname, lastWatered: todayLocal() }),
+    });
+    setCollection((current) => [item, ...current]);
+    return item;
+  };
 
-  // Dipakai Orang 1 di PlantCard: addToCollection(plantId)
-  // nickname bersifat opsional; kosong = tampilkan nama tanaman di kartu.
-  const addToCollection = useCallback((plantId, nickname = "") => {
-    const newItem = {
-      id: Date.now(),
-      plantId,
-      nickname: nickname.trim(),
-      lastWatered: todayString(),
-    };
-    setCollection((prev) => [...prev, newItem]);
-    return newItem;
-  }, []);
+  const markAsWatered = async (id, lastWatered = todayLocal()) => {
+    const updated = await request(`/${id}/water`, {
+      method: "PATCH",
+      body: JSON.stringify({ lastWatered }),
+    });
+    setCollection((current) => current.map((item) => (item.id === id ? updated : item)));
+    return updated;
+  };
 
-  const removeFromCollection = useCallback((id) => {
-    setCollection((prev) => prev.filter((item) => item.id !== id));
-  }, []);
+  const renamePlant = async (id, nickname) => {
+    const updated = await request(`/${id}`, {
+      method: "PATCH",
+      body: JSON.stringify({ nickname }),
+    });
+    setCollection((current) => current.map((item) => (item.id === id ? updated : item)));
+    return updated;
+  };
 
-  // Tombol "Sudah disiram": set tanggal terakhir siram ke hari ini
-  const markAsWatered = useCallback((id) => {
-    setCollection((prev) =>
-      prev.map((item) =>
-        item.id === id ? { ...item, lastWatered: todayString() } : item
-      )
-    );
-  }, []);
-
-  const updateNickname = useCallback((id, nickname) => {
-    setCollection((prev) =>
-      prev.map((item) =>
-        item.id === id ? { ...item, nickname: nickname.trim() } : item
-      )
-    );
-  }, []);
+  const removeFromCollection = async (id) => {
+    await request(`/${id}`, { method: "DELETE" });
+    setCollection((current) => current.filter((item) => item.id !== id));
+  };
 
   return {
     collection,
+    loading,
+    error,
+    reload: load,
     addToCollection,
-    removeFromCollection,
     markAsWatered,
-    updateNickname,
+    renamePlant,
+    removeFromCollection,
   };
 }
