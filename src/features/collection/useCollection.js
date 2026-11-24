@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
+import useAuth from "../auth/useAuth";
 
 const API_URL = "/api/collection";
 
@@ -22,7 +23,9 @@ async function request(path = "", options = {}) {
     } catch {
       // body bukan JSON, pakai pesan bawaan
     }
-    throw new Error(message);
+    const error = new Error(message);
+    error.status = response.status;
+    throw error;
   }
 
   return response.status === 204 ? null : response.json();
@@ -31,28 +34,43 @@ async function request(path = "", options = {}) {
 // Hooks Pattern: semua akses data koleksi ada di sini.
 // Fungsi aksi melempar error, jadi komponen yang memanggil bisa menampilkan pesannya.
 export default function useCollection() {
+  const { clearSession } = useAuth();
   const [collection, setCollection] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  // Semua pemanggilan API lewat sini. Kalau server membalas 401 (misalnya sesi habis),
+  // sesi di klien dihapus; ProtectedRoute lalu mengarahkan ke /masuk.
+  const call = useCallback(
+    async (path, options) => {
+      try {
+        return await request(path, options);
+      } catch (err) {
+        if (err.status === 401) clearSession();
+        throw err;
+      }
+    },
+    [clearSession]
+  );
 
   const load = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
-      setCollection(await request());
+      setCollection(await call());
     } catch (err) {
       setError(err.message);
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [call]);
 
   useEffect(() => {
     load();
   }, [load]);
 
   const addToCollection = async (plantId, nickname) => {
-    const item = await request("", {
+    const item = await call("", {
       method: "POST",
       body: JSON.stringify({ plantId, nickname, lastWatered: todayLocal() }),
     });
@@ -61,7 +79,7 @@ export default function useCollection() {
   };
 
   const markAsWatered = async (id, lastWatered = todayLocal()) => {
-    const updated = await request(`/${id}/water`, {
+    const updated = await call(`/${id}/water`, {
       method: "PATCH",
       body: JSON.stringify({ lastWatered }),
     });
@@ -70,7 +88,7 @@ export default function useCollection() {
   };
 
   const renamePlant = async (id, nickname) => {
-    const updated = await request(`/${id}`, {
+    const updated = await call(`/${id}`, {
       method: "PATCH",
       body: JSON.stringify({ nickname }),
     });
@@ -79,7 +97,7 @@ export default function useCollection() {
   };
 
   const removeFromCollection = async (id) => {
-    await request(`/${id}`, { method: "DELETE" });
+    await call(`/${id}`, { method: "DELETE" });
     setCollection((current) => current.filter((item) => item.id !== id));
   };
 
